@@ -21,19 +21,20 @@ export default function ShoppingCartModal() {
     redirectToCheckout,
   } = useShoppingCart();
 
-  async function handleCheckoutClick(event: any) {
+  async function handleCheckoutClick(event: React.MouseEvent<HTMLButtonElement>) {
     event.preventDefault();
     try {
       const result = await redirectToCheckout();
       if (result?.error) {
-        console.log("result");
+        console.log("Checkout Error:", result.error);
       }
     } catch (error) {
-      console.log(error);
+      console.log("Error during checkout:", error);
     }
   }
+
   return (
-    <Sheet open={shouldDisplayCart} onOpenChange={() => handleCartClick()}>
+    <Sheet open={shouldDisplayCart} onOpenChange={handleCartClick}>
       <SheetContent className="sm:max-w-lg w-[90vw]">
         <SheetHeader>
           <SheetTitle>Shopping Cart</SheetTitle>
@@ -43,7 +44,7 @@ export default function ShoppingCartModal() {
           <div className="mt-8 flex-1 overflow-y-auto">
             <ul className="-my-6 divide-y divide-gray-200">
               {cartCount === 0 ? (
-                <h1 className="py-6 px-6">You dont have any items</h1>
+                <h1 className="py-6 px-6">You don't have any items</h1>
               ) : (
                 <>
                   {Object.values(cartDetails ?? {}).map((entry) => (
@@ -108,8 +109,8 @@ export default function ShoppingCartModal() {
               <p>
                 OR{" "}
                 <button
-                  onClick={() => handleCartClick()}
-                  className=" font-medium text-primary hover:text-primary/80"
+                  onClick={handleCartClick}
+                  className="font-medium text-primary hover:text-primary/80"
                 >
                   Continue Shopping
                 </button>
